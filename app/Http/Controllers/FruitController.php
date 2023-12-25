@@ -23,15 +23,21 @@ class FruitController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'name' => 'required',
-        //     'price' => 'required'
-        // ]);
-        // return response('success', 201);
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required',
+            'image' => 'required|image|max:2048'
+        ]);
+
+        $img = time() . '.' . $request->image->extension();
+        $request->image->move(public_path('images'), $img);
+
         Fruit::create([
             'name' => $request->name,
-            'price' => $request->price
+            'price' => $request->price,
+            'image' => $img
         ]);
+
         return response('success', 201);
     }
 
